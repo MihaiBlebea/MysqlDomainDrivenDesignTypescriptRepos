@@ -1,7 +1,6 @@
 import { CreateOrUpdate } from './CreateOrUpdate'
 import { Update } from './Update'
 import { Create } from './Create'
-import { Mysql } from './../Mysql'
 
 
 
