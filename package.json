@@ -1,10 +1,10 @@
 {
-    "name": "MysqlDDDTypescriptRepos",
-    "version": "1.0.0",
-    "author" : {
-        "name" : "Mihai Blebea",
-        "email" : "mihaiserban.blebea@gmail.com",
-        "url" : "https://www.linkedin.com/in/mihai-blebea-87353310b/"
+    "name": "mysql-ts-repo-design",
+    "version": "1.0.1",
+    "author": {
+        "name": "Mihai Blebea",
+        "email": "mihaiserban.blebea@gmail.com",
+        "url": "https://www.linkedin.com/in/mihai-blebea-87353310b/"
     },
     "description": "A package that helps you create Domain Driven Design Mysql Repos in Node JS, Typescript or plain Js",
     "main": "index.js",
@@ -20,7 +20,7 @@
         "mysql": "^2.16.0",
         "uuid": "^3.3.2"
     },
-    "licenses" : [
+    "licenses": [
         {
             "type": "MIT",
             "url": "https://www.opensource.org/licenses/mit-license.php"

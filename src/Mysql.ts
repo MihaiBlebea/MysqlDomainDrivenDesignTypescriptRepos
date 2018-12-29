@@ -1,7 +1,8 @@
 import * as mysql from 'mysql'
+import { MysqlInterface } from './MysqlInterface'
 
 
-export class Mysql
+export class Mysql implements MysqlInterface
 {
     private host : string
 
@@ -20,7 +21,7 @@ export class Mysql
         this.password = password
     }
 
-    connect()
+    connect() : mysql.Connection
     {
         let conn = mysql.createConnection({
             host:     this.host,
@@ -40,7 +41,7 @@ export class Mysql
         return conn
     }
 
-    query(query : string, params? : [string])
+    query(query : string, params? : [string]) : Promise<Object>
     {
         return new Promise((resolve, reject)=> {
             let connection = this.connect()

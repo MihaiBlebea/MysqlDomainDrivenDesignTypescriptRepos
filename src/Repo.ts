@@ -1,4 +1,4 @@
-import { Mysql } from './Mysql'
+import { MysqlInterface } from './MysqlInterface'
 import * as uuid from 'uuid/v1'
 
 
@@ -13,7 +13,7 @@ export abstract class Repo
     abstract tableName : string
 
 
-    constructor(conn : Mysql)
+    constructor(conn : MysqlInterface)
     {
         this.conn = conn
     }
@@ -63,7 +63,7 @@ export abstract class Repo
         })
     }
 
-    createModels(rows : any)
+    protected createModels(rows : any)
     {
         return rows.map((row : any)=> {
             return this.createModel(row)
@@ -72,12 +72,12 @@ export abstract class Repo
 
     abstract createModel(row : any) : any
 
-    generateAttributeString()
+    protected generateAttributeString()
     {
         return `( ${this.attributes.join(', ') })`
     }
 
-    generateUpdateAttributeString()
+    protected generateUpdateAttributeString()
     {
         let attributes : any[] = []
         this.attributes.forEach((attribute)=> {
@@ -89,7 +89,7 @@ export abstract class Repo
         return attributes.join(', ')
     }
 
-    insertItems()
+    protected insertItems()
     {
         let items = this.items.map((item)=> {
             return Object.values(item)
@@ -101,7 +101,7 @@ export abstract class Repo
              VALUES ?`, [items])
     }
 
-    insertOrUpdateItems()
+    protected insertOrUpdateItems()
     {
         let items = this.items.map((item)=> {
             return Object.values(item)
