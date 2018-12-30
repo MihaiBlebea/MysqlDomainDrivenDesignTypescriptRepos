@@ -1,13 +1,3 @@
-// import { Mysql } from './Mysql'
-// import { Repo } from './Repo'
-// import { MysqlInterface } from './MysqlInterface'
-//
-//
-// export {
-//     Mysql,
-//     MysqlInterface,
-//     Repo
-// }
 import { Mysql } from './Mysql'
 import { MysqlInterface } from './MysqlInterface'
 import { Repo } from './Repo'

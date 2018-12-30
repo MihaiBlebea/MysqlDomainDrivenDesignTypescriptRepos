@@ -63,14 +63,16 @@ export abstract class Repo
         })
     }
 
-    protected createModels(rows : any)
+    protected constructModels(rows : any)
     {
         return rows.map((row : any)=> {
-            return this.createModel(row)
+            return this.constructModel(row)
         })
     }
 
-    abstract createModel(row : any) : any
+    abstract constructModel(row : any) : any
+
+    abstract deconstructModel(model : Object) : Object
 
     protected generateAttributeString()
     {
@@ -104,7 +106,8 @@ export abstract class Repo
     protected insertOrUpdateItems()
     {
         let items = this.items.map((item)=> {
-            return Object.values(item)
+            let mappedObject = this.deconstructModel(item)
+            return Object.values(mappedObject)
         })
 
         return this.conn.query(
@@ -121,7 +124,7 @@ export abstract class Repo
             `SELECT *
              FROM ${ this.tableName }
              WHERE id = ?`, [id]).then((rows : any)=> {
-                return this.createModels(rows)
+                return this.constructModels(rows)
              })
     }
 
@@ -130,7 +133,7 @@ export abstract class Repo
         return this.conn.query(
             `SELECT *
              FROM ${ this.tableName }`).then((rows : any)=> {
-                return this.createModels(rows)
+                return this.constructModels(rows)
              })
     }
 }

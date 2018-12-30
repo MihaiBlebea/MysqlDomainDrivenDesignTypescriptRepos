@@ -13,7 +13,7 @@ export class CategoryRepo extends Repo
         super(conn)
     }
 
-    createModel(row : any)
+    constructModel(row : any)
     {
         return new Category(
             row.id,
@@ -22,5 +22,16 @@ export class CategoryRepo extends Repo
             row.updated,
             row.created
         )
+    }
+
+    deconstructModel(model : Category) : Object
+    {
+        return {
+            id:      model.categoryId,
+            title:   model.categoryTitle,
+            slug:    model.categorySlug,
+            updated: model.categoryUpdated,
+            created: model.categoryCreated
+        }
     }
 }

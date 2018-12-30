@@ -9,6 +9,7 @@
         "strict": true,
         "noEmitOnError": true,
         "experimentalDecorators": true,
+        "declaration": true,
         "types": []
     }
 }
