@@ -1,17 +1,18 @@
 import { BaseRepository } from './../BaseRepository'
-import { User } from './models/User'
+import { User } from './models'
 import { IMysqlConnection } from './../interfaces'
 
 
 type UserDeconstructed = {
+    job_id: Number,
     name: String,
     age: Number
 }
 
 
-export class UserRepository extends BaseRepository<User>
+export class UserRepository<T> extends BaseRepository<T>
 {
-    attributes : String[] = ['name', 'age']
+    attributes : String[] = ['job_id', 'name', 'age']
 
 
     constructor(connection : IMysqlConnection)
@@ -21,12 +22,13 @@ export class UserRepository extends BaseRepository<User>
 
     constructModel(row : any)
     {
-        return new User(row.name, row.age, row.id)
+        return new User(row.job_id, row.name, row.age, row.id)
     }
 
     deconstructModel(model : User) : UserDeconstructed
     {
         return {
+            job_id: model.getJobId(),
             name: model.getName(),
             age: model.getAge()
         }

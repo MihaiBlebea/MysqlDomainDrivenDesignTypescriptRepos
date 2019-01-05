@@ -1,34 +1,24 @@
 import { UserRepository } from './UserRepository'
-import { User } from './models'
+import { JobRepository } from './JobRepository'
+import { User, Job } from './models'
 import { MysqlConnection } from './../MysqlConnection'
 
 
 let connection = new MysqlConnection('127.0.0.1', 'playground', 'admin', 'root', 32776)
-let repository = new UserRepository(connection)
+let userRepo = new UserRepository(connection)
+let jobRepo  = new JobRepository(connection)
 
-let mihai = new User('Mihai', 29)
+let developer = new Job('developer', 38000)
+let mihai = new User(1, 'Mihai', 29)
 
-
-// repository.createOne(mihai).then((result : any)=> {
+// jobRepo.createOne(developer).then((result : any)=> {
 //     console.log(result)
 // }).catch((error : Error)=> {
 //     console.log(error)
 // })
 
-// repository.findName('Mihai').then((result : any)=> {
+// userRepo.createOne(mihai).then((result : any)=> {
 //     console.log(result)
 // }).catch((error : Error)=> {
 //     console.log(error)
 // })
-
-// repository.findNameAndAge('Mihai', 29).then((result : any)=> {
-//     console.log(result)
-// }).catch((error : Error)=> {
-//     console.log(error)
-// })
-
-repository.deleteAll().then((result : any)=> {
-    console.log(result)
-}).catch((error : Error)=> {
-    console.log(error)
-})
