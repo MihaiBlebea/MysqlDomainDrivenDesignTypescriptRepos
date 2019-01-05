@@ -6,6 +6,8 @@ export declare abstract class BaseRepository<T> implements IRead<T>, IWrite<T> {
     abstract attributes: String[];
     protected tableName: String;
     constructor(connection: IMysqlConnection, tableName: String);
+    query(query: String, values?: any): any;
+    readonly table: String;
     createOne(model: Object): any;
     createMany(models: Object[]): any;
     protected create(values: StringOrNumber[] | StringOrNumber[][]): any;

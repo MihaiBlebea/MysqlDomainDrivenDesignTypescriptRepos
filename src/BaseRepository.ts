@@ -20,6 +20,22 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
         this.tableName  = tableName
     }
 
+    query(query : String, values? : any)
+    {
+        return this.connection.query(query, values).then((rows : any)=> {
+            if(Array.isArray(rows))
+            {
+                return this.constructModels(rows)
+            }
+            return rows
+        })
+    }
+
+    get table()
+    {
+        return this.tableName
+    }
+
     createOne(model : Object)
     {
         let deconstructed = this.deconstructModel(model)
@@ -42,7 +58,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
         return this.connection.query(
             `INSERT INTO ${ this.tableName }
              ${ this.generateCreateString() }
-             VALUES ?`, [values])
+             VALUES (?)`, [values])
     }
 
     createOrUpdate(models : OneOrManyObjects)

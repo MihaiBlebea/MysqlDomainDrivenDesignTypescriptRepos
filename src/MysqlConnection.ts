@@ -1,4 +1,4 @@
-import * as mysql from 'mysql'
+import { createConnection, Connection } from 'mysql'
 import { IMysqlConnection } from './interfaces'
 
 
@@ -6,28 +6,32 @@ export class MysqlConnection implements IMysqlConnection
 {
     private host : string
 
-    private user : string
-
     private database : string
+
+    private user : string
 
     private password : string
 
+    private port : number
 
-    constructor(host : string, user : string, database : string, password : string)
+
+    constructor(host : string, database : string, user : string, password : string, port? : number)
     {
         this.host     = host
-        this.user     = user
         this.database = database
+        this.user     = user
         this.password = password
+        this.port     = port || 3306
     }
 
-    connect() : mysql.Connection
+    connect() : Connection
     {
-        let conn = mysql.createConnection({
+        let conn = createConnection({
             host:     this.host,
             user:     this.user,
             database: this.database,
-            password: this.password
+            password: this.password,
+            port:     this.port
         })
 
         conn.connect((error)=> {

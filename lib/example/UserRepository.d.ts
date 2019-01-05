@@ -10,5 +10,9 @@ export declare class UserRepository extends BaseRepository<User> {
     constructor(connection: IMysqlConnection);
     constructModel(row: any): User;
     deconstructModel(model: User): UserDeconstructed;
+    findName(name: String): any;
+    findAge(age: Number): any;
+    findNameAndAge(name: String, age: Number): any;
+    deleteAll(): any;
 }
 export {};

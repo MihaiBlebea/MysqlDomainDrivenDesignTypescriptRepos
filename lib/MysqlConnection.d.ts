@@ -1,11 +1,12 @@
-import * as mysql from 'mysql';
+import { Connection } from 'mysql';
 import { IMysqlConnection } from './interfaces';
 export declare class MysqlConnection implements IMysqlConnection {
     private host;
-    private user;
     private database;
+    private user;
     private password;
-    constructor(host: string, user: string, database: string, password: string);
-    connect(): mysql.Connection;
+    private port;
+    constructor(host: string, database: string, user: string, password: string, port?: number);
+    connect(): Connection;
     query(query: string, params?: [string]): Promise<Object>;
 }
