@@ -1,8 +1,8 @@
 import * as mysql from 'mysql'
-import { MysqlInterface } from './MysqlInterface'
+import { IMysqlConnection } from './interfaces'
 
 
-export class Mysql implements MysqlInterface
+export class MysqlConnection implements IMysqlConnection
 {
     private host : string
 

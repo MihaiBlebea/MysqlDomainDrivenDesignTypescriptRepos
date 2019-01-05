@@ -1,7 +1,7 @@
 import * as mysql from 'mysql'
 
 
-export interface MysqlInterface
+export interface IMysqlConnection
 {
     connect() : mysql.Connection
 

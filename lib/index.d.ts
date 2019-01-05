@@ -1,7 +1,7 @@
-import { Mysql } from './Mysql';
-import { MysqlInterface } from './MysqlInterface';
-import { Repo } from './Repo';
+import { MysqlConnection } from './MysqlConnection';
+import { IMysqlConnection } from './interfaces';
+import { BaseRepository } from './BaseRepository';
 export declare namespace mysql {
-    const connect: (host: string, user: string, database: string, password: string) => Mysql;
+    const connect: (host: string, user: string, database: string, password: string) => MysqlConnection;
 }
-export { Repo, MysqlInterface };
+export { BaseRepository, IMysqlConnection, MysqlConnection };
