@@ -1,8 +1,8 @@
-## Mysql Repo Design
+## Mysql DDD Typescript BaseRepository Pattern
 
 ### Install:
 
-- With NPM ``` npm install mysql-ts-repo-design ```
+- With NPM  ``` npm install mysql-ts-repo-design ```
 
 ### Usage:
 
@@ -78,19 +78,19 @@ userRepo.findName('Bob').then((result)=> {
 
 #### Write API:
 
-- createOne(model) // Creates a database entry from a Model
+- **createOne(model)** // Creates a database entry from a Model
 
-- createMany(models) // Creates database entries for a list of Models
+- **createMany(models)** // Creates database entries for a list of Models
 
-- createOrUpdate(models) // Create or update a model or a list of models. It will create if the id is not present in the database table, otherwise update the model with that id
+- **createOrUpdate(models)** // Create or update a model or a list of models. It will create if the id is not present in the database table, otherwise update the model with that id
 
-- update(model) // Update a model in the database based on it's id.
+- **update(model)** // Update a model in the database based on it's id.
 
-- delete(id) // Delete a model from database based on it's id.
+- **delete(id)** // Delete a model from database based on it's id.
 
 
 #### Read API:
 
-- findId(id) // Find an entry with the specified id. It will return a promise with an array of models
+- **findId(id)** // Find an entry with the specified id. It will return a promise with an array of models
 
-- all() // Return an array with all the models in the database table
+- **all()** // Return an array with all the models in the database table
