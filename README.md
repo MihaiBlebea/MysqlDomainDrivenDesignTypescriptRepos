@@ -94,3 +94,40 @@ userRepo.findName('Bob').then((result)=> {
 - **findId(id)** // Find an entry with the specified id. It will return a promise with an array of models
 
 - **all()** // Return an array with all the models in the database table
+
+
+### Create your own methods on the class that extends the BaseRepository
+
+```
+export class UserRepository extends BaseRepository
+{
+    // All the methods that implement the abstract BaseRepository class
+
+    // Your own methods
+    findName(name : string)
+    {
+        return this.query(
+            `SELECT *
+             FROM ${ this.table }
+             WHERE name = ?`, [ name ])
+    }
+
+    findEmail(email : string)
+    {
+        return this.query(
+            `SELECT *
+             FROM ${ this.table }
+             WHERE email = ?`, [ email ])
+    }
+
+    findEmailAndName(email : string, name : string)
+    {
+        return this.query(
+            `SELECT *
+             FROM ${ this.table }
+             WHERE email = ?
+             AND name = ?`, [ email, name ])
+    }
+}
+
+```
