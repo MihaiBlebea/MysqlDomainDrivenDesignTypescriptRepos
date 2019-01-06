@@ -40,7 +40,6 @@ export class UserRepository<T> extends BaseRepository<T>
             `SELECT *
              FROM ${ this.table }
              WHERE name = ?`, [name]).then((rows : any)=> {
-                 console.log(rows)
                  return this.constructModels(rows)
              })
     }
