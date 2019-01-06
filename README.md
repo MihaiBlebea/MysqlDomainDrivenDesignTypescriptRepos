@@ -131,3 +131,9 @@ export class UserRepository extends BaseRepository
 }
 
 ```
+
+### Inspiration for this repo from:
+
+- Article: https://hackernoon.com/generic-repository-with-typescript-and-node-js-731c10a1b98e
+
+- Github: https://github.com/ErickWendel/generic-repository-nodejs-typescript-article
