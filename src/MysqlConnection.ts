@@ -39,7 +39,7 @@ export class MysqlConnection implements IMysqlConnection
             {
                 throw error;
             }
-            console.log("Connected!")
+            console.log("Connected to the database!")
         })
 
         return conn

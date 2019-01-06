@@ -1,13 +1,11 @@
 import { IMysqlConnection, IRead, IWrite } from './interfaces'
-import { StringOrNumber, OneOrManyObjects, Model, Deconstructed } from './types'
+import { StringOrNumber, Deconstructed } from './types'
 
 
 
 export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
 {
     protected connection : any
-
-    protected items : any[] = []
 
     abstract attributes : String[]
 
@@ -36,7 +34,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
         return this.tableName
     }
 
-    createOne(model : Object)
+    createOne(model : T)
     {
         let deconstructed = this.deconstructModel(model)
         let values = Object.values(deconstructed)
@@ -44,7 +42,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
         return this.create(values)
     }
 
-    createMany(models : Object[])
+    createMany(models : T[])
     {
         let values = models.map((model)=> {
             return Object.values(this.deconstructModel(model))
@@ -61,7 +59,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
              VALUES (?)`, [values])
     }
 
-    createOrUpdate(models : OneOrManyObjects)
+    createOrUpdate(models : T | T[])
     {
         let values : StringOrNumber[] | StringOrNumber[][]
         if(Array.isArray(models))
@@ -82,7 +80,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
              UPDATE ${ this.generateCreateOrUpdateString() }`, [values])
     }
 
-    update(model : Model)
+    update(model : T)
     {
         let deconstructed = this.deconstructModel(model)
 
@@ -93,7 +91,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
                 values.push(deconstructed[key])
             }
         })
-        values.push(model.id)
+        values.push(deconstructed.id)
 
         return this.connection.query(
             `UPDATE ${ this.tableName }
@@ -109,9 +107,9 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
              WHERE id = ?`, [id])
     }
 
-    abstract constructModel(row : any) : Object
+    abstract constructModel(row : any) : T
 
-    abstract deconstructModel(model : Object) : Deconstructed
+    abstract deconstructModel(model : T) : Deconstructed
 
     constructModels(rows : any)
     {
