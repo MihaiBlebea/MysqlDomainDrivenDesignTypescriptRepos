@@ -18,7 +18,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
         this.tableName  = tableName
     }
 
-    query(query : String, values? : any)
+    query(query : String, values? : any) : Promise<T[]>
     {
         return this.connection.query(query, values).then((rows : any)=> {
             if(Array.isArray(rows))
@@ -99,7 +99,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
              WHERE id = ?`, [values])
     }
 
-    delete(id : StringOrNumber | StringOrNumber[]) : Promise<T>
+    delete(id : StringOrNumber | StringOrNumber[])
     {
         return this.connection.query(
             `DELETE
@@ -147,7 +147,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
         return attributes.join(', ')
     }
 
-    findId(id : StringOrNumber)
+    findId(id : StringOrNumber) : Promise<T[]>
     {
         return this.connection.query(
             `SELECT *
@@ -157,7 +157,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
              })
     }
 
-    all()
+    all() : Promise<T[]>
     {
         return this.connection.query(
             `SELECT *
