@@ -1,8 +1,8 @@
-import { StringOrNumber, Model, OneOrManyObjects } from './../types';
+import { StringOrNumber } from './../types';
 export interface IWrite<T> {
-    createOne(model: Model): Promise<T>;
-    createMany(models: Model[]): Promise<T>;
-    createOrUpdate(models: OneOrManyObjects): Promise<T>;
-    update(model: Model): Promise<T>;
+    createOne(model: T): Promise<T>;
+    createMany(models: T[]): Promise<T>;
+    createOrUpdate(models: T | T[]): Promise<T>;
+    update(model: T): Promise<T>;
     delete(id: StringOrNumber | StringOrNumber[]): Promise<T>;
 }

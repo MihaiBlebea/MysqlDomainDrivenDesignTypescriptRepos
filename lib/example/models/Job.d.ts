@@ -3,7 +3,7 @@ export declare class Job {
     private title;
     private salary;
     constructor(title: String, salary: Number, id?: Number);
-    getId(): Number | undefined;
+    getId(): Number;
     getTitle(): String;
     getSalary(): Number;
 }

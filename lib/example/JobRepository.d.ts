@@ -1,12 +1,15 @@
 import { BaseRepository } from './../BaseRepository';
 import { IMysqlConnection } from './../interfaces';
 import { Job } from './models';
-export declare class JobRepository<T> extends BaseRepository<T> {
+declare type JobDeconstructed = {
+    title: String;
+    salary: Number;
+    id: Number;
+};
+export declare class JobRepository extends BaseRepository<Job> {
     attributes: String[];
     constructor(connection: IMysqlConnection);
-    constructModel(row: any): Object;
-    deconstructModel(model: Job): {
-        title: String;
-        salary: Number;
-    };
+    constructModel(row: JobDeconstructed): Job;
+    deconstructModel(model: any): JobDeconstructed;
 }
+export {};

@@ -6,11 +6,12 @@ import { IMysqlConnection } from './../interfaces'
 type UserDeconstructed = {
     job_id: Number,
     name: String,
-    age: Number
+    age: Number,
+    id: Number
 }
 
 
-export class UserRepository<T> extends BaseRepository<T>
+export class UserRepository extends BaseRepository<User>
 {
     attributes : String[] = ['job_id', 'name', 'age']
 
@@ -20,14 +21,15 @@ export class UserRepository<T> extends BaseRepository<T>
         super(connection, 'users')
     }
 
-    constructModel(row : any)
+    constructModel(row : UserDeconstructed)
     {
         return new User(row.job_id, row.name, row.age, row.id)
     }
 
-    deconstructModel(model : User) : UserDeconstructed
+    deconstructModel(model)
     {
         return {
+            id: model.getId(),
             job_id: model.getJobId(),
             name: model.getName(),
             age: model.getAge()

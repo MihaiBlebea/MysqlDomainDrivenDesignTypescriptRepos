@@ -1,25 +1,24 @@
 import { IMysqlConnection, IRead, IWrite } from './interfaces';
-import { StringOrNumber, OneOrManyObjects, Model, Deconstructed } from './types';
+import { StringOrNumber, Deconstructed } from './types';
 export declare abstract class BaseRepository<T> implements IRead<T>, IWrite<T> {
     protected connection: any;
-    protected items: any[];
     abstract attributes: String[];
     protected tableName: String;
     constructor(connection: IMysqlConnection, tableName: String);
-    query(query: String, values?: any): any;
+    query(query: String, values?: any): Promise<T[]>;
     readonly table: String;
-    createOne(model: Object): any;
-    createMany(models: Object[]): any;
+    createOne(model: T): any;
+    createMany(models: T[]): any;
     protected create(values: StringOrNumber[] | StringOrNumber[][]): any;
-    createOrUpdate(models: OneOrManyObjects): any;
-    update(model: Model): any;
-    delete(id: StringOrNumber | StringOrNumber[]): Promise<T>;
-    abstract constructModel(row: any): Object;
-    abstract deconstructModel(model: Object): Deconstructed;
+    createOrUpdate(models: T | T[]): any;
+    update(model: T): any;
+    delete(id: StringOrNumber | StringOrNumber[]): any;
+    abstract constructModel(row: {}): T;
+    abstract deconstructModel(model: T): Deconstructed;
     constructModels(rows: any): any;
     generateCreateString(): string;
     generateCreateOrUpdateString(): string;
     generateUpdateString(): string;
-    findId(id: StringOrNumber): any;
-    all(): any;
+    findId(id: StringOrNumber): Promise<T[]>;
+    all(): Promise<T[]>;
 }

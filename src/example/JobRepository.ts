@@ -5,10 +5,11 @@ import { Job } from './models'
 
 type JobDeconstructed = {
     title : String,
-    job : Number
+    salary: Number,
+    id : Number
 }
 
-export class JobRepository<T> extends BaseRepository<T>
+export class JobRepository extends BaseRepository<Job>
 {
     attributes : String[] = ['title', 'salary']
 
@@ -17,16 +18,17 @@ export class JobRepository<T> extends BaseRepository<T>
         super(connection, 'jobs')
     }
 
-    constructModel(row : any): Object
+    constructModel(row : JobDeconstructed)
     {
         return new Job(row.title, row.salary, row.id)
     }
 
-    deconstructModel(model: Job)
+    deconstructModel(model) : JobDeconstructed
     {
         return {
             title: model.getTitle(),
-            salary: model.getSalary()
+            salary: model.getSalary(),
+            id: model.getId()
         }
     }
 }

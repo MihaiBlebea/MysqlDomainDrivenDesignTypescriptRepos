@@ -5,15 +5,21 @@ declare type UserDeconstructed = {
     job_id: Number;
     name: String;
     age: Number;
+    id: Number;
 };
-export declare class UserRepository<T> extends BaseRepository<T> {
+export declare class UserRepository extends BaseRepository<User> {
     attributes: String[];
     constructor(connection: IMysqlConnection);
-    constructModel(row: any): User;
-    deconstructModel(model: User): UserDeconstructed;
+    constructModel(row: UserDeconstructed): User;
+    deconstructModel(model: any): {
+        id: any;
+        job_id: any;
+        name: any;
+        age: any;
+    };
     findName(name: String): any;
-    findAge(age: Number): any;
-    findNameAndAge(name: String, age: Number): any;
-    deleteAll(): any;
+    findAge(age: Number): Promise<any>;
+    findNameAndAge(name: String, age: Number): Promise<any>;
+    deleteAll(): Promise<User[]>;
 }
 export {};

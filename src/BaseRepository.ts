@@ -107,7 +107,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
              WHERE id = ?`, [id])
     }
 
-    abstract constructModel(row : any) : T
+    abstract constructModel(row : {}) : T
 
     abstract deconstructModel(model : T) : Deconstructed
 
