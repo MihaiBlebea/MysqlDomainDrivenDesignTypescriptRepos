@@ -74,6 +74,18 @@ userRepo.findName('Bob').then((result)=> {
 
 ```
 
+
+### Options that can be supplied to the object
+
+- Log the final sql query for debug. You can add a env variable to trigger this depending on the DEV / PROD env:
+
+```
+let connection = new MysqlConnection('127.0.0.1', 'database_name', 'admin', 'root', 3306)
+connection.setup({
+    showQuery: true
+})
+```
+
 ### Methods you can use from the BaseRepository
 
 #### Write API:

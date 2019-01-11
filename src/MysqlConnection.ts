@@ -1,4 +1,4 @@
-import { createConnection, createPool, Connection, Pool } from 'mysql'
+import { createConnection, createPool, Connection, Pool, Query } from 'mysql'
 import { IMysqlConnection } from './interfaces'
 
 
@@ -18,6 +18,8 @@ export class MysqlConnection implements IMysqlConnection
 
     private pool? : Pool
 
+    private showQuery : Boolean
+
 
     constructor(host : string, database : string, user : string, password : string, port? : number)
     {
@@ -28,6 +30,14 @@ export class MysqlConnection implements IMysqlConnection
         this.port     = port || 3306
 
         this.pool = this.createPool()
+    }
+
+    setup(options : { showQuery? : Boolean })
+    {
+        if(options.showQuery)
+        {
+            this.showQuery = options.showQuery
+        }
     }
 
     connect() : Connection
@@ -77,24 +87,34 @@ export class MysqlConnection implements IMysqlConnection
         return new Promise((resolve, reject)=> {
             if(this.isPoolAvailable())
             {
-                this.pool.query(query, params, (error, result)=> {
+                let queryMade = this.pool.query(query, params, (error, result)=> {
                     if(error)
                     {
                         reject(error)
                     }
+                    this.logQuery(queryMade)
                     resolve(result)
                 })
             } else if(this.isConnectionAvailable()) {
-                this.connection.query(query, params, (error, result)=> {
+                let queryMade = this.connection.query(query, params, (error, result)=> {
                     if(error)
                     {
                         reject(error)
                     }
+                    this.logQuery(queryMade)
                     resolve(result)
                 })
             } else {
                 reject(new Error('No connection available'))
             }
         })
+    }
+
+    private logQuery(query : Query)
+    {
+        if(this.showQuery)
+        {
+            console.log(query.sql)
+        }
     }
 }
