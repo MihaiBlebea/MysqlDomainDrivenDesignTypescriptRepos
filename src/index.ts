@@ -1,6 +1,7 @@
 import { MysqlConnection } from './MysqlConnection'
 import { IMysqlConnection } from './interfaces'
 import { BaseRepository } from './BaseRepository'
+import { Deconstructed } from './types'
 
 
 export namespace mysql {
@@ -12,5 +13,6 @@ export namespace mysql {
 export {
     BaseRepository,
     IMysqlConnection,
-    MysqlConnection
+    MysqlConnection,
+    Deconstructed
 }

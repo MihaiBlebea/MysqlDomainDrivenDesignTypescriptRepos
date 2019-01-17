@@ -18,7 +18,7 @@ export class MysqlConnection implements IMysqlConnection
 
     private pool? : Pool
 
-    private showQuery : Boolean
+    private showQuery : Boolean = false
 
 
     constructor(host : string, database : string, user : string, password : string, port? : number)
@@ -87,7 +87,7 @@ export class MysqlConnection implements IMysqlConnection
         return new Promise((resolve, reject)=> {
             if(this.isPoolAvailable())
             {
-                let queryMade = this.pool.query(query, params, (error, result)=> {
+                let queryMade = this.pool!.query(query, params, (error, result)=> {
                     if(error)
                     {
                         reject(error)
@@ -96,7 +96,7 @@ export class MysqlConnection implements IMysqlConnection
                     resolve(result)
                 })
             } else if(this.isConnectionAvailable()) {
-                let queryMade = this.connection.query(query, params, (error, result)=> {
+                let queryMade = this.connection!.query(query, params, (error, result)=> {
                     if(error)
                     {
                         reject(error)

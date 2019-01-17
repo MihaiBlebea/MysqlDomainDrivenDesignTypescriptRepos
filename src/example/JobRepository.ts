@@ -1,13 +1,13 @@
 import { BaseRepository } from './../BaseRepository'
 import { IMysqlConnection } from './../interfaces'
 import { Job } from './models'
+import { Deconstructed } from './../types'
 
-
-type JobDeconstructed = {
-    title : String,
-    salary: Number,
-    id : Number
-}
+// type JobDeconstructed = {
+//     title : String,
+//     salary: Number,
+//     id : Number
+// }
 
 export class JobRepository extends BaseRepository<Job>
 {
@@ -18,12 +18,12 @@ export class JobRepository extends BaseRepository<Job>
         super(connection, 'jobs')
     }
 
-    constructModel(row : JobDeconstructed)
+    constructModel(row : Deconstructed)
     {
         return new Job(row.title, row.salary, row.id)
     }
 
-    deconstructModel(model) : JobDeconstructed
+    deconstructModel(model : Job)
     {
         return {
             title: model.getTitle(),

@@ -6,7 +6,7 @@
         "outDir": "lib",
         "module": "commonjs",
         "moduleResolution": "node",
-        "strict": false,
+        "strict": true,
         "noEmitOnError": true,
         "experimentalDecorators": true,
         "declaration": true,

@@ -12,11 +12,17 @@ connection.setup({
 let userRepo = new UserRepository(connection)
 let jobRepo  = new JobRepository(connection)
 
-// let developer = new Job('developer', 38000)
+let developer = new Job('developer', 38000)
 // let mihai = new User(1, 'Mihai', 29)
 
-jobRepo.findId(1).then((result)=> {
+// jobRepo.findId(1).then((result)=> {
+//     console.log(result)
+// }).catch((error)=> {
+//     console.log(error)
+// })
+
+jobRepo.createOne(developer).then((result : Job[])=> {
     console.log(result)
-}).catch((error)=> {
+}).catch((error : Error)=> {
     console.log(error)
 })

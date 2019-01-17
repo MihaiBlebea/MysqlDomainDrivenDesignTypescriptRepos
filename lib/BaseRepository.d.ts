@@ -13,9 +13,9 @@ export declare abstract class BaseRepository<T> implements IRead<T>, IWrite<T> {
     createOrUpdate(models: T | T[]): any;
     update(model: T): any;
     delete(id: StringOrNumber | StringOrNumber[]): any;
-    abstract constructModel(row: {}): T;
+    abstract constructModel(row: Deconstructed): T;
     abstract deconstructModel(model: T): Deconstructed;
-    constructModels(rows: any): any;
+    constructModels(rows: Deconstructed): any;
     generateCreateString(): string;
     generateCreateOrUpdateString(): string;
     generateUpdateString(): string;

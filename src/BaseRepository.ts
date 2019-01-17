@@ -37,7 +37,13 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
     createOne(model : T)
     {
         let deconstructed = this.deconstructModel(model)
-        let values = Object.values(deconstructed)
+        let values : StringOrNumber[] = []
+        Object.keys(deconstructed).forEach((key)=> {
+            if(key !== 'id')
+            {
+                values.push(deconstructed[key])
+            }
+        })
 
         return this.create(values)
     }
@@ -107,11 +113,11 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
              WHERE id = ?`, [id])
     }
 
-    abstract constructModel(row : {}) : T
+    abstract constructModel(row : Deconstructed) : T
 
     abstract deconstructModel(model : T) : Deconstructed
 
-    constructModels(rows : any)
+    constructModels(rows : Deconstructed)
     {
         return rows.map((row : any)=> {
             return this.constructModel(row)
@@ -120,7 +126,10 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
 
     generateCreateString()
     {
-        return `( ${this.attributes.join(', ') })`
+        let attributes = this.attributes.filter((attribute)=> {
+            return attribute !== 'id'
+        })
+        return `(${ attributes.join(', ') })`
     }
 
     generateCreateOrUpdateString()

@@ -1,14 +1,7 @@
 import { BaseRepository } from './../BaseRepository'
 import { User } from './models'
 import { IMysqlConnection } from './../interfaces'
-
-
-type UserDeconstructed = {
-    job_id: Number,
-    name: String,
-    age: Number,
-    id: Number
-}
+import { Deconstructed } from './../types'
 
 
 export class UserRepository extends BaseRepository<User>
@@ -21,12 +14,12 @@ export class UserRepository extends BaseRepository<User>
         super(connection, 'users')
     }
 
-    constructModel(row : UserDeconstructed)
+    constructModel(row : Deconstructed)
     {
         return new User(row.job_id, row.name, row.age, row.id)
     }
 
-    deconstructModel(model)
+    deconstructModel(model : User)
     {
         return {
             id: model.getId(),
