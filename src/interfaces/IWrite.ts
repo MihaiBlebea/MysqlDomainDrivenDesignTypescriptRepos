@@ -1,7 +1,7 @@
-import { StringOrNumber, Deconstructed } from './../types'
+type StringNumberBoolean = String | Number | Boolean | undefined
 
 
-export interface IWrite<T>
+export default interface IWrite<T>
 {
     createOne(model : T) : Promise<T>
 
@@ -11,5 +11,5 @@ export interface IWrite<T>
 
     update(model : T) : Promise<T>
 
-    delete(id : StringOrNumber | StringOrNumber[]) : Promise<T>
+    delete(id : StringNumberBoolean | StringNumberBoolean[]) : Promise<T>
 }

@@ -1,8 +1,6 @@
-import { MysqlConnection } from './MysqlConnection';
-import { IMysqlConnection } from './interfaces';
-import { BaseRepository } from './BaseRepository';
-import { Deconstructed } from './types';
-export declare namespace mysql {
-    const connect: (host: string, user: string, database: string, password: string) => MysqlConnection;
-}
-export { BaseRepository, IMysqlConnection, MysqlConnection, Deconstructed };
+import { PoolConnection, Connection } from 'mysql';
+import MysqlConnection from './MysqlConnection';
+import BaseRepository from './BaseRepository';
+import UnitOfWork from './UnitOfWork';
+import Query from './Query';
+export { BaseRepository, MysqlConnection, UnitOfWork, Query, PoolConnection, Connection };

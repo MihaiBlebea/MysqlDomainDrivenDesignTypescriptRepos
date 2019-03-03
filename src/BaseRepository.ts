@@ -1,32 +1,38 @@
-import { IMysqlConnection, IRead, IWrite } from './interfaces'
-import { StringOrNumber, Deconstructed } from './types'
+import { PoolConnection, Connection } from 'mysql'
+import { IRead, IWrite } from './interfaces'
+import Query from './Query'
+
+
+type StringNumberBoolean = String | Number | Boolean | undefined
+
+type DeconstructedModel = { [ key : string ] : any }
 
 
 
-export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
+export default abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
 {
-    protected connection : any
+    protected connection : PoolConnection | Connection
 
     abstract attributes : String[]
 
     protected tableName : String
 
 
-    constructor(connection : IMysqlConnection, tableName : String)
+    constructor(connection : PoolConnection | Connection, tableName : String)
     {
         this.connection = connection
         this.tableName  = tableName
     }
 
-    query(query : String, values? : any) : Promise<T[]>
+    async query(query : string, values? : any) : Promise<T[]>
     {
-        return this.connection.query(query, values).then((rows : any)=> {
-            if(Array.isArray(rows))
-            {
-                return this.constructModels(rows)
-            }
-            return rows
-        })
+        let rows = await Query.execute(query, values, this.connection, { logQuery : true })
+
+        if(Array.isArray(rows))
+        {
+            return this.constructModels(rows)
+        }
+        return rows
     }
 
     get table()
@@ -37,7 +43,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
     createOne(model : T)
     {
         let deconstructed = this.deconstructModel(model)
-        let values : StringOrNumber[] = []
+        let values : StringNumberBoolean[] = []
         Object.keys(deconstructed).forEach((key)=> {
             if(key !== 'id')
             {
@@ -45,7 +51,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
             }
         })
 
-        return this.create(values)
+        return this.create([values])
     }
 
     createMany(models : T[])
@@ -57,17 +63,17 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
         return this.create(values)
     }
 
-    protected create(values : StringOrNumber[] | StringOrNumber[][])
+    protected create(values : StringNumberBoolean[] | StringNumberBoolean[][])
     {
-        return this.connection.query(
+        return Query.execute(
             `INSERT INTO ${ this.tableName }
              ${ this.generateCreateString() }
-             VALUES (?)`, [values])
+             VALUES ?`, [values], this.connection)
     }
 
     createOrUpdate(models : T | T[])
     {
-        let values : StringOrNumber[] | StringOrNumber[][]
+        let values : StringNumberBoolean[] | StringNumberBoolean[][]
         if(Array.isArray(models))
         {
             values = models.map((model)=> {
@@ -78,19 +84,19 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
             values = Object.values(this.deconstructModel(model))
         }
 
-        return this.connection.query(
+        return Query.execute(
             `INSERT INTO ${ this.tableName }
              ${ this.generateCreateString() }
              VALUES ?
              ON DUPLICATE KEY
-             UPDATE ${ this.generateCreateOrUpdateString() }`, [values])
+             UPDATE ${ this.generateCreateOrUpdateString() }`, [values], this.connection)
     }
 
     update(model : T)
     {
         let deconstructed = this.deconstructModel(model)
 
-        let values : StringOrNumber[] = []
+        let values : StringNumberBoolean[] = []
         Object.keys(deconstructed).forEach((key)=> {
             if(key !== 'id')
             {
@@ -99,25 +105,25 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
         })
         values.push(deconstructed.id)
 
-        return this.connection.query(
+        return Query.execute(
             `UPDATE ${ this.tableName }
              SET ${ this.generateUpdateString() }
-             WHERE id = ?`, [values])
+             WHERE id = ?`, [values], this.connection)
     }
 
-    delete(id : StringOrNumber | StringOrNumber[])
+    delete(id : StringNumberBoolean | StringNumberBoolean[])
     {
-        return this.connection.query(
+        return Query.execute(
             `DELETE
              FROM ${ this.tableName }
-             WHERE id = ?`, [id])
+             WHERE id = ?`, [id], this.connection)
     }
 
-    abstract constructModel(row : Deconstructed) : T
+    abstract constructModel(row : DeconstructedModel) : T
 
-    abstract deconstructModel(model : T) : Deconstructed
+    abstract deconstructModel(model : T) : { [key : string] : StringNumberBoolean }
 
-    constructModels(rows : Deconstructed)
+    constructModels(rows : DeconstructedModel)
     {
         return rows.map((row : any)=> {
             return this.constructModel(row)
@@ -134,7 +140,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
 
     generateCreateOrUpdateString()
     {
-        let attributes : StringOrNumber[] = []
+        let attributes : StringNumberBoolean[] = []
         this.attributes.forEach((attribute)=> {
             if(attribute !== 'id')
             {
@@ -146,7 +152,7 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
 
     generateUpdateString()
     {
-        let attributes : StringOrNumber[] = []
+        let attributes : StringNumberBoolean[] = []
         this.attributes.forEach((attribute)=> {
             if(attribute !== 'id')
             {
@@ -156,22 +162,17 @@ export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
         return attributes.join(', ')
     }
 
-    findId(id : StringOrNumber) : Promise<T[]>
+    findId(id : string | number) : Promise<T[]>
     {
-        return this.connection.query(
-            `SELECT *
-             FROM ${ this.tableName }
-             WHERE id = ?`, [id]).then((rows : any)=> {
-                return this.constructModels(rows)
-             })
+        return this.query(
+                    `SELECT *
+                     FROM ${ this.tableName }
+                     WHERE id = ?`, [ id ])
     }
 
     all() : Promise<T[]>
     {
-        return this.connection.query(
-            `SELECT *
-             FROM ${ this.tableName }`).then((rows : any)=> {
-                return this.constructModels(rows)
-             })
+        return this.query(`SELECT * FROM ${ this.tableName }`)
+
     }
 }

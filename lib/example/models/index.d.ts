@@ -1,3 +1,4 @@
-import { User } from './User';
-import { Job } from './Job';
-export { User, Job };
+import User from './User';
+import Job from './Job';
+import Car from './Car';
+export { User, Job, Car };

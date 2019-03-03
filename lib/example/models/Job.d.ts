@@ -1,4 +1,4 @@
-export declare class Job {
+export default class Job {
     private id?;
     private title;
     private salary;

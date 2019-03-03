@@ -1,19 +1,18 @@
-import { BaseRepository } from './../BaseRepository';
+import BaseRepository from './../BaseRepository';
 import { User } from './models';
-import { IMysqlConnection } from './../interfaces';
-import { Deconstructed } from './../types';
-export declare class UserRepository extends BaseRepository<User> {
+import { PoolConnection, Connection } from 'mysql';
+export default class UserRepository extends BaseRepository<User> {
     attributes: String[];
-    constructor(connection: IMysqlConnection);
-    constructModel(row: Deconstructed): User;
+    constructor(connection: PoolConnection | Connection);
+    constructModel(row: any): User;
     deconstructModel(model: User): {
-        id: Number | undefined;
+        id: number | undefined;
         job_id: Number;
         name: String;
         age: Number;
     };
-    findName(name: String): any;
-    findAge(age: Number): Promise<any>;
-    findNameAndAge(name: String, age: Number): Promise<any>;
+    findName(name: String): Promise<User[]>;
+    findAge(age: Number): Promise<User[]>;
+    findNameAndAge(name: String, age: Number): Promise<User[]>;
     deleteAll(): Promise<User[]>;
 }
