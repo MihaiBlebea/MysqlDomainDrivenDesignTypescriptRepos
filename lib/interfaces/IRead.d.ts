@@ -1,5 +1,6 @@
-import { StringOrNumber } from './../types';
+declare type StringNumberBoolean = String | Number | Boolean | undefined;
 export interface IRead<T> {
-    findId(id: StringOrNumber): Promise<T[]>;
+    findId(id: StringNumberBoolean): Promise<T[]>;
     all(): Promise<T[]>;
 }
+export {};

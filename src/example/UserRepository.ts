@@ -1,20 +1,21 @@
 import { BaseRepository } from './../BaseRepository'
 import { User } from './models'
 import { IMysqlConnection } from './../interfaces'
-import { Deconstructed } from './../types'
+import { PoolConnection, Connection } from 'mysql'
 
 
-export class UserRepository extends BaseRepository<User>
+
+export default class UserRepository extends BaseRepository<User>
 {
     attributes : String[] = ['job_id', 'name', 'age']
 
 
-    constructor(connection : IMysqlConnection)
+    constructor(connection : PoolConnection | Connection)
     {
         super(connection, 'users')
     }
 
-    constructModel(row : Deconstructed)
+    constructModel(row : any)
     {
         return new User(row.job_id, row.name, row.age, row.id)
     }
@@ -31,12 +32,10 @@ export class UserRepository extends BaseRepository<User>
 
     findName(name : String)
     {
-        return this.connection.query(
+        return this.query(
             `SELECT *
              FROM ${ this.table }
-             WHERE name = ?`, [name]).then((rows : any)=> {
-                 return this.constructModels(rows)
-             })
+             WHERE name = ?`, [name])
     }
 
     findAge(age : Number)
@@ -44,9 +43,7 @@ export class UserRepository extends BaseRepository<User>
         return this.query(
             `SELECT *
              FROM ${ this.table }
-             WHERE age = ?`, [age]).then((result : any)=> {
-            return result
-        })
+             WHERE age = ?`, [age])
     }
 
     findNameAndAge(name : String, age : Number)
@@ -55,9 +52,7 @@ export class UserRepository extends BaseRepository<User>
             `SELECT *
              FROM ${ this.table }
              WHERE name = ?
-             AND age = ?`, [name, age]).then((result : any)=> {
-            return result
-        })
+             AND age = ?`, [name, age])
     }
 
     deleteAll()

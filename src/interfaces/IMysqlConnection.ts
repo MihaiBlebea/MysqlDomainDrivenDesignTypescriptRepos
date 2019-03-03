@@ -1,9 +1,11 @@
-import * as mysql from 'mysql'
+import { PoolConnection, Connection, Pool, Query } from 'mysql'
 
 
 export interface IMysqlConnection
 {
-    connect() : mysql.Connection
+    createPool() : Pool
 
-    query(query : String, params? : [String]) : Promise<Object>
+    getPool() : Pool | undefined
+
+    getConnection() : Promise<Connection | PoolConnection>
 }
