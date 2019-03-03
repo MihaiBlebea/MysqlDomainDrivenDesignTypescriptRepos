@@ -1,5 +1,5 @@
 declare type StringNumberBoolean = String | Number | Boolean | undefined;
-export interface IWrite<T> {
+export default interface IWrite<T> {
     createOne(model: T): Promise<T>;
     createMany(models: T[]): Promise<T>;
     createOrUpdate(models: T | T[]): Promise<T>;

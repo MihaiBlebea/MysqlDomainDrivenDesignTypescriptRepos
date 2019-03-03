@@ -9,7 +9,7 @@ type DeconstructedModel = { [ key : string ] : any }
 
 
 
-export abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
+export default abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
 {
     protected connection : PoolConnection | Connection
 

@@ -1,7 +1,7 @@
 type StringNumberBoolean = String | Number | Boolean | undefined
 
 
-export interface IWrite<T>
+export default interface IWrite<T>
 {
     createOne(model : T) : Promise<T>
 

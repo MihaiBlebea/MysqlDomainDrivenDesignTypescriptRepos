@@ -1,4 +1,4 @@
-import { BaseRepository } from './../BaseRepository';
+import BaseRepository from './../BaseRepository';
 import { User } from './models';
 import { PoolConnection, Connection } from 'mysql';
 export default class UserRepository extends BaseRepository<User> {
@@ -6,7 +6,7 @@ export default class UserRepository extends BaseRepository<User> {
     constructor(connection: PoolConnection | Connection);
     constructModel(row: any): User;
     deconstructModel(model: User): {
-        id: Number | undefined;
+        id: number | undefined;
         job_id: Number;
         name: String;
         age: Number;

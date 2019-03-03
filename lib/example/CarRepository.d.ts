@@ -1,4 +1,4 @@
-import { BaseRepository } from './../BaseRepository';
+import BaseRepository from './../BaseRepository';
 import { Car } from './models';
 import { PoolConnection, Connection } from 'mysql';
 export default class CarRepository extends BaseRepository<Car> {

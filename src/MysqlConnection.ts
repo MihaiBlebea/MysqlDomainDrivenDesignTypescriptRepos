@@ -2,7 +2,7 @@ import { createPool, PoolConnection, Connection, Pool, Query } from 'mysql'
 import { IMysqlConnection } from './interfaces'
 
 
-export class MysqlConnection implements IMysqlConnection
+export default class MysqlConnection implements IMysqlConnection
 {
     private host : string
 
@@ -41,7 +41,7 @@ export class MysqlConnection implements IMysqlConnection
         })
     }
 
-    getPool()
+    getPool() : Pool | undefined
     {
         return this._pool
     }
@@ -70,74 +70,4 @@ export class MysqlConnection implements IMysqlConnection
     {
         return (<PoolConnection>connection).release !== undefined;
     }
-
-    // async query(query : string, params : any[], connection? : Connection | PoolConnection) : Promise<Object>
-    // {
-    //     let conn = connection
-    //     if(!connection)
-    //     {
-    //         conn = await this.getConnection()
-    //     }
-    //
-    //     return new Promise((resolve, reject)=> {
-    //         let queryMade = conn!.query(query, params, (error, result)=> {
-    //
-    //             // Log the query to the console
-    //             this.logQuery(queryMade)
-    //
-    //             // If error reject and return Promise
-    //             if(error) { return reject(error) }
-    //
-    //             // Release the current connection if this is not transaction
-    //             // And if connection is of type PoolConnection
-    //             if(connection === undefined && this.isPoolConnection(conn))
-    //             {
-    //                 conn!.release()
-    //             }
-    //
-    //             return resolve(result)
-    //         })
-    //     })
-    // }
-
-    async startTransaction() : Promise<Connection | PoolConnection>
-    {
-        let connection = await this.getConnection()
-
-        return new Promise((resolve, reject)=> {
-            connection.beginTransaction((error : Error)=> {
-                if(error) { reject(error) }
-
-                // Return the connection to perform queries agains
-                resolve(connection)
-            })
-        })
-    }
-
-    commitTransaction(connection : Connection | PoolConnection)
-    {
-        connection.commit()
-        if(this.isPoolConnection(connection))
-        {
-            connection.release()
-        }
-    }
-
-    rollbackTransaction(connection : Connection | PoolConnection)
-    {
-        connection.rollback()
-        if(this.isPoolConnection(connection))
-        {
-            connection.release()
-        }
-    }
-
-    private logQuery(query : Query)
-    {
-        if(this.showQuery)
-        {
-            console.log(query.sql)
-        }
-    }
-
 }

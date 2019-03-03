@@ -1,4 +1,4 @@
-import { BaseRepository } from './../BaseRepository'
+import BaseRepository from './../BaseRepository'
 import { User } from './models'
 import { IMysqlConnection } from './../interfaces'
 import { PoolConnection, Connection } from 'mysql'

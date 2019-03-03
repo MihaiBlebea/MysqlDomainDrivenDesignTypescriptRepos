@@ -1,6 +1,6 @@
 import { PoolConnection, Connection, Pool } from 'mysql';
 import { IMysqlConnection } from './interfaces';
-export declare class MysqlConnection implements IMysqlConnection {
+export default class MysqlConnection implements IMysqlConnection {
     private host;
     private database;
     private user;
@@ -14,8 +14,4 @@ export declare class MysqlConnection implements IMysqlConnection {
     private isPoolAvailable;
     getConnection(): Promise<Connection | PoolConnection>;
     isPoolConnection(connection?: Connection | PoolConnection): connection is PoolConnection;
-    startTransaction(): Promise<Connection | PoolConnection>;
-    commitTransaction(connection: Connection | PoolConnection): void;
-    rollbackTransaction(connection: Connection | PoolConnection): void;
-    private logQuery;
 }

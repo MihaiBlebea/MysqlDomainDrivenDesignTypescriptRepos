@@ -1,5 +1,5 @@
 declare type StringNumberBoolean = String | Number | Boolean | undefined;
-export interface IRead<T> {
+export default interface IRead<T> {
     findId(id: StringNumberBoolean): Promise<T[]>;
     all(): Promise<T[]>;
 }

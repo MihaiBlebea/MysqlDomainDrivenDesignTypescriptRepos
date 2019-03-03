@@ -1,5 +1,6 @@
-import { MysqlConnection } from './MysqlConnection';
-import { IMysqlConnection } from './interfaces';
-import { BaseRepository } from './BaseRepository';
+import { PoolConnection, Connection } from 'mysql';
+import MysqlConnection from './MysqlConnection';
+import BaseRepository from './BaseRepository';
 import UnitOfWork from './UnitOfWork';
-export { BaseRepository, IMysqlConnection, MysqlConnection, UnitOfWork };
+import Query from './Query';
+export { BaseRepository, MysqlConnection, UnitOfWork, Query, PoolConnection, Connection };

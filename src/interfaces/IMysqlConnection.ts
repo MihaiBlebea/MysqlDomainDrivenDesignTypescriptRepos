@@ -1,9 +1,9 @@
-import { PoolConnection, Connection, Pool, Query } from 'mysql'
+import { PoolConnection, Connection, Pool, } from 'mysql'
 
 
-export interface IMysqlConnection
+export default interface IMysqlConnection
 {
-    createPool() : Pool
+    createPool() : void
 
     getPool() : Pool | undefined
 

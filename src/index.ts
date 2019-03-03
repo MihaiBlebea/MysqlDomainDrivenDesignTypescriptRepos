@@ -1,17 +1,15 @@
-import { MysqlConnection } from './MysqlConnection'
-import { IMysqlConnection } from './interfaces'
-import { BaseRepository } from './BaseRepository'
+import { PoolConnection, Connection } from 'mysql'
+import MysqlConnection from './MysqlConnection'
+import BaseRepository from './BaseRepository'
 import UnitOfWork from './UnitOfWork'
+import Query from './Query'
 
-// export namespace mysql {
-//     export const connect = (host : string, user : string, database : string, password : string)=> {
-//         return new MysqlConnection(host, user, database, password)
-//     }
-// }
 
 export {
     BaseRepository,
-    IMysqlConnection,
     MysqlConnection,
-    UnitOfWork
+    UnitOfWork,
+    Query,
+    PoolConnection,
+    Connection
 }
