@@ -1,14 +1,15 @@
 import { PoolConnection, Connection } from 'mysql'
-import MysqlConnection from './MysqlConnection'
+import MysqlConnectionFactory from './MysqlConnectionFactory'
 import BaseRepository from './BaseRepository'
-import UnitOfWork from './UnitOfWork'
+import { UnitOfWork, Unit } from './UnitOfWork'
 import Query from './Query'
 
 
 export {
     BaseRepository,
-    MysqlConnection,
+    MysqlConnectionFactory,
     UnitOfWork,
+    Unit,
     Query,
     PoolConnection,
     Connection

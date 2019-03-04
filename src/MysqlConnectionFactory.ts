@@ -1,8 +1,7 @@
-import { createPool, PoolConnection, Connection, Pool, Query } from 'mysql'
-import { IMysqlConnection } from './interfaces'
+import { createPool, PoolConnection, Connection, Pool } from 'mysql'
 
 
-export default class MysqlConnection implements IMysqlConnection
+export default class MysqlConnectionFactory
 {
     private host : string
 
@@ -14,9 +13,7 @@ export default class MysqlConnection implements IMysqlConnection
 
     private port : number
 
-    private _pool? : Pool
-
-    private showQuery : Boolean = false
+    private _pool : Pool
 
 
     constructor(host : string, database : string, user : string, password : string, port? : number)
@@ -30,7 +27,7 @@ export default class MysqlConnection implements IMysqlConnection
         this._pool = this.createPool()
     }
 
-    createPool()
+    private createPool()
     {
         return createPool({
             host:     this.host,
@@ -41,17 +38,17 @@ export default class MysqlConnection implements IMysqlConnection
         })
     }
 
-    getPool() : Pool | undefined
-    {
-        return this._pool
-    }
-
     private isPoolAvailable()
     {
         return this._pool ? true : false
     }
 
-    getConnection() : Promise<Connection | PoolConnection>
+    get pool() : Pool
+    {
+        return this._pool
+    }
+
+    getConnectionPromise() : Promise<Connection | PoolConnection>
     {
         return new Promise((resolve, reject)=> {
             if(this.isPoolAvailable())
@@ -66,8 +63,16 @@ export default class MysqlConnection implements IMysqlConnection
         })
     }
 
-    isPoolConnection(connection? : Connection | PoolConnection) : connection is PoolConnection
+    getConnection(callback : Function)
     {
-        return (<PoolConnection>connection).release !== undefined;
+        if(this.isPoolAvailable())
+        {
+            this._pool!.getConnection((error, conn)=> {
+                if(error) { throw error }
+                callback(conn)
+            })
+        } else {
+            throw new Error('No connection available')
+        }
     }
 }

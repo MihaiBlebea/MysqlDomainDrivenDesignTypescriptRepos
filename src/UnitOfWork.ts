@@ -1,14 +1,45 @@
 import { PoolConnection, Connection } from 'mysql'
-import { IMysqlConnection } from './interfaces'
+import { MysqlConnectionFactory } from './'
 
 
-export default abstract class UnitOfWork
+export abstract class UnitOfWork
 {
-    static begin(connection : Connection | PoolConnection, callback : Function)
+    static begin(connection : MysqlConnectionFactory, callback : Function)
     {
-        connection.beginTransaction((error : Error)=> {
-            if(error) { throw error }
+        connection.getConnection((conn: PoolConnection)=> {
+            conn.beginTransaction((error : Error)=> {
+                if(error) { throw error }
+
+                callback(new Unit(conn))
+            })
         })
-        callback(connection)
+    }
+}
+
+
+export class Unit
+{
+    private _conn : PoolConnection
+
+    constructor(conn : PoolConnection)
+    {
+        this._conn = conn
+    }
+
+    get connection()
+    {
+        return this._conn
+    }
+
+    rollback()
+    {
+        this._conn.rollback()
+        this._conn.release()
+    }
+
+    complete()
+    {
+        this._conn.commit()
+        this._conn.release()
     }
 }

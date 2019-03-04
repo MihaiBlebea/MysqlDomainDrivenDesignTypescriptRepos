@@ -1,6 +1,6 @@
 import { PoolConnection, Connection } from 'mysql';
-import MysqlConnection from './MysqlConnection';
+import MysqlConnectionFactory from './MysqlConnectionFactory';
 import BaseRepository from './BaseRepository';
-import UnitOfWork from './UnitOfWork';
+import { UnitOfWork, Unit } from './UnitOfWork';
 import Query from './Query';
-export { BaseRepository, MysqlConnection, UnitOfWork, Query, PoolConnection, Connection };
+export { BaseRepository, MysqlConnectionFactory, UnitOfWork, Unit, Query, PoolConnection, Connection };
