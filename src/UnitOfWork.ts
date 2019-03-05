@@ -4,13 +4,25 @@ import { MysqlConnectionFactory } from './'
 
 export abstract class UnitOfWork
 {
-    static begin(connection : MysqlConnectionFactory, callback : Function)
-    {
-        connection.getConnection((conn: PoolConnection)=> {
-            conn.beginTransaction((error : Error)=> {
-                if(error) { throw error }
+    // static begin(connection : MysqlConnectionFactory, callback : Function)
+    // {
+    //     connection.getPoolConnection((conn: PoolConnection)=> {
+    //         conn.beginTransaction((error : Error)=> {
+    //             if(error) { throw error }
+    //
+    //             callback(new Unit(conn))
+    //         })
+    //     })
+    // }
 
-                callback(new Unit(conn))
+    static begin(factory : MysqlConnectionFactory) : Promise<Unit>
+    {
+        return new Promise((resolve, reject)=> {
+            let conn = factory.getConnection()
+            conn.beginTransaction((error : Error)=> {
+                if(error) { reject(error) }
+
+                resolve(new Unit(conn))
             })
         })
     }
@@ -19,9 +31,9 @@ export abstract class UnitOfWork
 
 export class Unit
 {
-    private _conn : PoolConnection
+    private _conn : Connection
 
-    constructor(conn : PoolConnection)
+    constructor(conn : Connection)
     {
         this._conn = conn
     }
@@ -34,12 +46,12 @@ export class Unit
     rollback()
     {
         this._conn.rollback()
-        this._conn.release()
+        this._conn.end()
     }
 
     complete()
     {
         this._conn.commit()
-        this._conn.release()
+        this._conn.end()
     }
 }

@@ -7,39 +7,44 @@ import { UnitOfWork, MysqlConnectionFactory, Unit } from './../'
 import { PoolConnection } from './../'
 
 
-let connFactory = new MysqlConnectionFactory('127.0.0.1', 'playground_db', 'admin', 'root', 32778)
+let factory = new MysqlConnectionFactory('127.0.0.1', 'playground_db', 'admin', 'root', 32778)
 
+const execute = async (factory : MysqlConnectionFactory)=> {
+    let unit = await UnitOfWork.begin(factory)
 
-// UnitOfWork.begin(mysql, async (unit : Unit)=> {
-//
-//     let userRepo = new UserRepository(unit.connection)
-//     let carRepo  = new CarRepository(unit.connection)
-//
-//     let user = new User(1, 'Mihai', 29)
-//
-//     user.addCar(new Car('Mercedes', 5, 25000, 1))
-//     user.addCar(new Car('Clio', 3, 1500, 1))
-//
-//     try {
-//
-//         let users = await userRepo.findId(1)
-//         let cars  = await carRepo.findUserId(users[0].getId()!)
-//
-//         users[0].addCars(cars)
-//
-//         console.log(users[0])
-//         unit.complete()
-//
-//     } catch(error) {
-//         unit.rollback()
-//     }
-//
+    let userRepo = new UserRepository(unit.connection)
+    let carRepo  = new CarRepository(unit.connection)
+
+    try {
+        let user = new User(1, 'Mihai', 29)
+
+        await userRepo.createOne(user)
+
+        user.addCar(new Car('Mercedes', 5, 25000, 1))
+        user.addCar(new Car('Clio', 3, 1500, 1))
+
+        let cars  = await carRepo.createMany(user.cars)
+
+        unit.complete()
+        // console.log(savedUser)
+        return user
+    } catch(error) {
+        console.log(error)
+        unit.rollback()
+    }
+}
+
+// execute(factory).then((result)=> {
+//     console.log(result)
+// }).catch((error)=> {
+//     console.log(error)
 // })
 
-let user = new User(1, 'Mihai', 29)
-connFactory.getConnection(async (conn : PoolConnection)=> {
-    let userRepo = new UserRepository(conn)
+let conn = factory.getConnection()
+let userRepo = new UserRepository(conn)
 
-    let result = await userRepo.createOne(user)
+userRepo.createOne(new User(1, 'Florin', 40)).then((result)=> {
     console.log(result)
+}).catch((error)=> {
+    console.log(error)
 })

@@ -1,4 +1,4 @@
-import { createPool, PoolConnection, Connection, Pool } from 'mysql'
+import { createPool, createConnection, PoolConnection, Connection, Pool } from 'mysql'
 
 
 export default class MysqlConnectionFactory
@@ -13,7 +13,7 @@ export default class MysqlConnectionFactory
 
     private port : number
 
-    private _pool : Pool
+    private _pool? : Pool
 
 
     constructor(host : string, database : string, user : string, password : string, port? : number)
@@ -38,17 +38,17 @@ export default class MysqlConnectionFactory
         })
     }
 
-    private isPoolAvailable()
+    isPoolAvailable()
     {
         return this._pool ? true : false
     }
 
-    get pool() : Pool
+    get pool() : Pool | undefined
     {
         return this._pool
     }
 
-    getConnectionPromise() : Promise<Connection | PoolConnection>
+    getPoolConnectionPromise() : Promise<Connection | PoolConnection>
     {
         return new Promise((resolve, reject)=> {
             if(this.isPoolAvailable())
@@ -63,7 +63,7 @@ export default class MysqlConnectionFactory
         })
     }
 
-    getConnection(callback : Function)
+    getPoolConnection(callback : Function)
     {
         if(this.isPoolAvailable())
         {
@@ -74,5 +74,16 @@ export default class MysqlConnectionFactory
         } else {
             throw new Error('No connection available')
         }
+    }
+
+    getConnection()
+    {
+        return createConnection({
+            host:     this.host,
+            user:     this.user,
+            database: this.database,
+            password: this.password,
+            port:     this.port
+        })
     }
 }

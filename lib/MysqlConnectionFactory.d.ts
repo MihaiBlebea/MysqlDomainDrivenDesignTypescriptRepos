@@ -5,11 +5,12 @@ export default class MysqlConnectionFactory {
     private user;
     private password;
     private port;
-    private _pool;
+    private _pool?;
     constructor(host: string, database: string, user: string, password: string, port?: number);
     private createPool;
-    private isPoolAvailable;
-    readonly pool: Pool;
-    getConnectionPromise(): Promise<Connection | PoolConnection>;
-    getConnection(callback: Function): void;
+    isPoolAvailable(): boolean;
+    readonly pool: Pool | undefined;
+    getPoolConnectionPromise(): Promise<Connection | PoolConnection>;
+    getPoolConnection(callback: Function): void;
+    getConnection(): Connection;
 }
