@@ -83,11 +83,11 @@ export default abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
             let model = models
             values = Object.values(this.deconstructModel(model))
         }
-
+        console.log(this.generateCreateString(), this.generateCreateOrUpdateString())
         return Query.execute(
             `INSERT INTO ${ this.tableName }
-             ${ this.generateCreateString() }
-             VALUES ?
+             ${ this.generateKeyStringCreateOrUpdate() }
+             VALUES (?)
              ON DUPLICATE KEY
              UPDATE ${ this.generateCreateOrUpdateString() }`, [values], this.connection)
     }
@@ -136,6 +136,15 @@ export default abstract class BaseRepository<T> implements IRead<T>, IWrite<T>
             return attribute !== 'id'
         })
         return `(${ attributes.join(', ') })`
+    }
+
+    generateKeyStringCreateOrUpdate()
+    {
+        if(this.attributes.length === 0)
+        {
+            throw Error('Atributes not set in child class')
+        }
+        return `(${ this.attributes.join(', ') })`
     }
 
     generateCreateOrUpdateString()

@@ -23,6 +23,7 @@ export default abstract class BaseRepository<T> implements IRead<T>, IWrite<T> {
     };
     constructModels(rows: DeconstructedModel): any;
     generateCreateString(): string;
+    generateKeyStringCreateOrUpdate(): string;
     generateCreateOrUpdateString(): string;
     generateUpdateString(): string;
     findId(id: string | number): Promise<T[]>;

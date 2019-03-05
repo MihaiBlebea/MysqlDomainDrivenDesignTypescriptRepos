@@ -43,7 +43,7 @@ const execute = async (factory : MysqlConnectionFactory)=> {
 let conn = factory.getConnection()
 let userRepo = new UserRepository(conn)
 
-userRepo.createOne(new User(1, 'Florin', 40)).then((result)=> {
+userRepo.createOrUpdate(new User(1, 'Stefan', 40, 1)).then((result)=> {
     console.log(result)
 }).catch((error)=> {
     console.log(error)

@@ -17,6 +17,7 @@ export default abstract class Query
                 {
                     console.log(queryMade.sql)
                 }
+                console.log(queryMade.sql)
 
                 // If error reject and return Promise
                 if(error) { return reject(error) }

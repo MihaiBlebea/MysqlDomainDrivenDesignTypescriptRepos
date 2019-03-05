@@ -1,13 +1,12 @@
 import BaseRepository from './../BaseRepository'
 import { User } from './models'
-import { IMysqlConnection } from './../interfaces'
 import { PoolConnection, Connection } from 'mysql'
 
 
 
 export default class UserRepository extends BaseRepository<User>
 {
-    attributes : String[] = ['job_id', 'name', 'age']
+    attributes : String[] = ['id', 'job_id', 'name', 'age']
 
 
     constructor(connection : PoolConnection | Connection)
