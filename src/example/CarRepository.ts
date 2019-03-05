@@ -38,4 +38,11 @@ export default class CarRepository extends BaseRepository<Car>
              FROM ${ this.table }
              WHERE user_id = ?`, [ id ])
     }
+
+    createFoo(model : Car)
+    {
+
+    }
+
+
 }

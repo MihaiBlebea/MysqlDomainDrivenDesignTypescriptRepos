@@ -12,4 +12,5 @@ export default class CarRepository extends BaseRepository<Car> {
         price: number;
     };
     findUserId(id: number): Promise<Car[]>;
+    createFoo(model: Car): void;
 }

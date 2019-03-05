@@ -14,6 +14,7 @@ const execute = async (factory : MysqlConnectionFactory)=> {
 
     let userRepo = new UserRepository(unit.connection)
     let carRepo  = new CarRepository(unit.connection)
+    let jobRepo  = new JobRepository(unit.connection)
 
     try {
         let user = new User(1, 'Mihai', 29)
@@ -25,6 +26,8 @@ const execute = async (factory : MysqlConnectionFactory)=> {
 
         let cars  = await carRepo.createMany(user.cars)
 
+        await jobRepo.createOne(new Job('developer', 24000))
+
         unit.complete()
         // console.log(savedUser)
         return user
@@ -34,17 +37,17 @@ const execute = async (factory : MysqlConnectionFactory)=> {
     }
 }
 
-// execute(factory).then((result)=> {
-//     console.log(result)
-// }).catch((error)=> {
-//     console.log(error)
-// })
-
-let conn = factory.getConnection()
-let userRepo = new UserRepository(conn)
-
-userRepo.createOrUpdate(new User(1, 'Stefan', 40, 1)).then((result)=> {
+execute(factory).then((result)=> {
     console.log(result)
 }).catch((error)=> {
     console.log(error)
 })
+
+// let conn = factory.getConnection()
+// let userRepo = new UserRepository(conn)
+//
+// userRepo.createOrUpdate(new User(1, 'Stefan', 40, 1)).then((result)=> {
+//     console.log(result)
+// }).catch((error)=> {
+//     console.log(error)
+// })
